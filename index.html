@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shiva Sai Pashikanti — Cybersecurity & Cloud Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #050a0f;
+      --surface: #0a1520;
+      --surface2: #0f1e2e;
+      --accent: #00e5ff;
+      --accent2: #00ff88;
+      --text: #e8f4f8;
+      --muted: #5a7a8a;
+      --border: rgba(0,229,255,0.15);
+      --glow: 0 0 20px rgba(0,229,255,0.3);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'Syne', sans-serif; overflow-x: hidden; cursor: default; }
+    body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; z-index: 0; }
+    body::after { content: ''; position: fixed; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px); pointer-events: none; z-index: 1; }
+
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 18px 60px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); background: rgba(5,10,15,0.9); backdrop-filter: blur(12px); }
+    .nav-logo { font-family: 'Share Tech Mono', monospace; color: var(--accent); font-size: 13px; letter-spacing: 2px; }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--muted); text-decoration: none; letter-spacing: 2px; text-transform: uppercase; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--accent); }
+
+    section { position: relative; z-index: 2; padding: 100px 80px; max-width: 1200px; margin: 0 auto; }
+    #hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding-top: 120px; max-width: 100%; }
+
+    .hero-tag { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--accent2); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 20px; opacity: 0; animation: fadeUp 0.6s 0.2s forwards; }
+    .hero-tag::before { content: '> '; color: var(--accent); }
+    h1 { font-size: clamp(44px, 7vw, 88px); font-weight: 800; line-height: 1.0; letter-spacing: -2px; margin-bottom: 8px; opacity: 0; animation: fadeUp 0.6s 0.4s forwards; }
+    .name-line { display: block; background: linear-gradient(135deg, var(--text) 0%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero-subtitle { font-size: clamp(14px, 1.6vw, 19px); color: var(--muted); margin: 28px 0 36px; max-width: 620px; line-height: 1.75; font-weight: 400; opacity: 0; animation: fadeUp 0.6s 0.6s forwards; }
+    .hero-badges { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 36px; opacity: 0; animation: fadeUp 0.6s 0.8s forwards; }
+    .badge { padding: 5px 12px; border: 1px solid var(--border); background: var(--surface); color: var(--accent); font-family: 'Share Tech Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; }
+    .hero-cta { display: flex; gap: 14px; opacity: 0; animation: fadeUp 0.6s 1.0s forwards; }
+    .btn-primary { padding: 12px 26px; background: var(--accent); color: var(--bg); font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 2px; text-decoration: none; text-transform: uppercase; font-weight: 700; transition: all 0.2s; display: inline-block; }
+    .btn-primary:hover { background: var(--accent2); box-shadow: 0 0 30px rgba(0,255,136,0.4); transform: translateY(-2px); }
+    .btn-outline { padding: 12px 26px; border: 1px solid var(--accent); color: var(--accent); font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 2px; text-decoration: none; text-transform: uppercase; transition: all 0.2s; display: inline-block; }
+    .btn-outline:hover { background: rgba(0,229,255,0.08); box-shadow: var(--glow); transform: translateY(-2px); }
+    .terminal-line { position: absolute; bottom: 50px; left: 80px; font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--muted); opacity: 0; animation: fadeIn 1s 1.5s forwards; }
+    .terminal-line span { color: var(--accent2); animation: blink 1s infinite; }
+
+    .section-header { margin-bottom: 44px; }
+    .section-number { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--accent); letter-spacing: 4px; margin-bottom: 10px; display: block; }
+    h2 { font-size: clamp(26px, 3.5vw, 44px); font-weight: 800; letter-spacing: -1px; line-height: 1.1; }
+
+    .about-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 60px; align-items: start; }
+    .about-text p { color: var(--muted); line-height: 1.8; font-size: 14px; margin-bottom: 14px; font-weight: 400; }
+    .about-text p strong { color: var(--text); }
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); padding: 22px; transition: border-color 0.2s; }
+    .stat-card:hover { border-color: var(--accent); }
+    .stat-number { font-size: 28px; font-weight: 800; color: var(--accent); line-height: 1; margin-bottom: 6px; }
+    .stat-label { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
+
+    .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2px; }
+    .skill-category { background: var(--surface); border: 1px solid var(--border); padding: 24px; transition: all 0.3s; position: relative; overflow: hidden; }
+    .skill-category::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent), transparent); opacity: 0; transition: opacity 0.3s; }
+    .skill-category:hover::before { opacity: 1; }
+    .skill-category:hover { border-color: rgba(0,229,255,0.3); }
+    .skill-category h3 { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--accent); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 14px; }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .skill-tag { padding: 3px 9px; background: var(--surface2); border: 1px solid var(--border); font-size: 11px; color: var(--text); font-weight: 600; }
+
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(460px, 1fr)); gap: 2px; }
+    .project-card { background: var(--surface); border: 1px solid var(--border); padding: 32px; position: relative; overflow: hidden; transition: all 0.3s; }
+    .project-card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(0,229,255,0.03) 0%, transparent 60%); opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+    .project-card:hover::after { opacity: 1; }
+    .project-card:hover { border-color: rgba(0,229,255,0.4); transform: translateY(-3px); }
+    .project-number { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 3px; margin-bottom: 10px; }
+    .project-card h3 { font-size: 19px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+    .project-card p { color: var(--muted); font-size: 13px; line-height: 1.7; margin-bottom: 16px; font-weight: 400; }
+    .project-tech { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+    .tech-chip { padding: 3px 8px; background: rgba(0,229,255,0.08); border: 1px solid rgba(0,229,255,0.2); font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--accent); letter-spacing: 1px; }
+    .project-highlights { list-style: none; margin-bottom: 20px; }
+    .project-highlights li { font-size: 12px; color: var(--muted); padding: 4px 0 4px 16px; position: relative; font-weight: 400; }
+    .project-highlights li::before { content: '→'; position: absolute; left: 0; color: var(--accent2); }
+    .project-link { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--accent); text-decoration: none; letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid rgba(0,229,255,0.3); padding-bottom: 2px; transition: all 0.2s; }
+    .project-link:hover { color: var(--accent2); border-color: var(--accent2); }
+
+    .exp-list { display: flex; flex-direction: column; gap: 2px; }
+    .exp-card { background: var(--surface); border: 1px solid var(--border); padding: 28px; transition: border-color 0.3s; }
+    .exp-card:hover { border-color: rgba(0,229,255,0.3); }
+    .exp-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
+    .exp-title { font-size: 15px; font-weight: 700; color: var(--text); }
+    .exp-date { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--accent); letter-spacing: 1px; white-space: nowrap; }
+    .exp-company { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 1px; margin-bottom: 12px; }
+    .exp-bullets { list-style: none; }
+    .exp-bullets li { font-size: 13px; color: var(--muted); padding: 3px 0 3px 16px; position: relative; font-weight: 400; line-height: 1.6; }
+    .exp-bullets li::before { content: '→'; position: absolute; left: 0; color: var(--accent2); font-size: 11px; }
+
+    .sims-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2px; }
+    .sim-card { background: var(--surface); border: 1px solid var(--border); padding: 26px; transition: all 0.3s; position: relative; }
+    .sim-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent2), transparent); opacity: 0; transition: opacity 0.3s; }
+    .sim-card:hover::before { opacity: 1; }
+    .sim-card:hover { border-color: rgba(0,229,255,0.3); }
+    .sim-company { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--accent2); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+    .sim-card h4 { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
+    .sim-card ul { list-style: none; }
+    .sim-card ul li { font-size: 12px; color: var(--muted); padding: 3px 0 3px 14px; position: relative; line-height: 1.6; }
+    .sim-card ul li::before { content: '•'; position: absolute; left: 0; color: var(--accent); }
+
+    .certs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 2px; margin-bottom: 2px; }
+    .cert-card { background: var(--surface); border: 1px solid var(--border); padding: 22px; display: flex; gap: 14px; align-items: flex-start; transition: all 0.3s; }
+    .cert-card:hover { border-color: rgba(0,229,255,0.4); }
+    .cert-icon { width: 38px; height: 38px; background: rgba(0,229,255,0.1); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+    .cert-info h4 { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+    .cert-info p { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--accent); letter-spacing: 1px; }
+    .cert-info .cert-year { color: var(--muted); margin-top: 3px; }
+
+    .edu-list { display: flex; flex-direction: column; gap: 2px; }
+    .edu-card { background: var(--surface); border: 1px solid var(--border); padding: 20px 26px; display: flex; justify-content: space-between; align-items: flex-start; transition: border-color 0.3s; }
+    .edu-card:hover { border-color: rgba(0,229,255,0.3); }
+    .edu-left h4 { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+    .edu-left p { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 1px; }
+    .edu-left .edu-grade { color: var(--accent2); margin-top: 3px; font-size: 11px; }
+    .edu-right { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--accent); letter-spacing: 1px; white-space: nowrap; margin-left: 20px; }
+
+    #contact { text-align: center; }
+    #contact h2 { margin-bottom: 12px; }
+    .contact-sub { color: var(--muted); font-size: 14px; margin-bottom: 36px; font-weight: 400; }
+    .contact-links { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+    .contact-link { padding: 12px 22px; border: 1px solid var(--border); background: var(--surface); color: var(--text); text-decoration: none; font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; transition: all 0.2s; display: flex; align-items: center; gap: 8px; }
+    .contact-link:hover { border-color: var(--accent); color: var(--accent); box-shadow: var(--glow); }
+
+    footer { position: relative; z-index: 2; border-top: 1px solid var(--border); padding: 24px 80px; display: flex; justify-content: space-between; align-items: center; }
+    footer p { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 2px; }
+    footer span { color: var(--accent); }
+    .divider { height: 1px; background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity: 0.15; margin: 0 80px; position: relative; z-index: 2; }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    .reveal { opacity: 1; transform: translateY(0); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .js-loaded .reveal { opacity: 0; transform: translateY(30px); }
+    .js-loaded .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 768px) {
+      nav { padding: 14px 20px; }
+      .nav-links { display: none; }
+      #hero, section { padding: 100px 20px 60px; }
+      .about-grid { grid-template-columns: 1fr; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .terminal-line { left: 20px; }
+      footer { padding: 20px; flex-direction: column; gap: 10px; text-align: center; }
+      .divider { margin: 0 20px; }
+      .edu-card { flex-direction: column; gap: 6px; }
+      .exp-header { flex-direction: column; gap: 4px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-logo">SSP // SECURITY</div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#simulations">Simulations</a></li>
+      <li><a href="#certs">Certs</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <section id="hero">
+    <div class="hero-tag">Cybersecurity & Cloud Professional</div>
+    <h1><span class="name-line">Shiva Sai</span><span class="name-line">Pashikanti</span></h1>
+    <p class="hero-subtitle">MSc Cyber Security graduate (2:1) specialising in cloud security, cloud engineering, and threat detection. Building Python security tools and completing real-world simulations with AIG, Tata, and Mastercard. Open to Cloud Engineer, Cloud Security, and SOC Analyst roles.</p>
+    <div class="hero-badges">
+      <span class="badge">GCP</span>
+      <span class="badge">Cloud Security</span>
+      <span class="badge">Cloud Engineering</span>
+      <span class="badge">SOC Analysis</span>
+      <span class="badge">MITRE ATT&CK</span>
+      <span class="badge">Terraform</span>
+      <span class="badge">Kubernetes</span>
+      <span class="badge">IAM</span>
+    </div>
+    <div class="hero-cta">
+      <a href="#projects" class="btn-primary">View Projects</a>
+      <a href="https://github.com/Shivasai-25" target="_blank" class="btn-outline">GitHub Profile</a>
+    </div>
+    <div class="terminal-line">$ status: open to cloud security, cloud engineering &amp; SOC roles <span>_</span></div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="about">
+    <div class="section-header reveal"><span class="section-number">// 01</span><h2>About Me</h2></div>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>I'm a <strong>Cybersecurity and Cloud Engineering professional</strong> with an MSc in Cyber Security with Advanced Research (2:1) from the University of Hertfordshire, passionate about securing and building cloud infrastructure.</p>
+        <p>My expertise spans <strong>GCP cloud engineering</strong> — deploying Compute Engine, GKE, VPC, IAM, and Cloud Storage — alongside hands-on <strong>cloud security</strong> work including threat detection, log analysis, and security posture assessment using Python.</p>
+        <p>I've completed <strong>3 industry job simulations</strong> with AIG, Tata, and Mastercard via Forage, covering vulnerability research, IAM assessment, and phishing analysis. I also hold Google Cloud Cybersecurity and Cloud Engineer certifications.</p>
+        <p>Currently working as a <strong>Software Test Engineer</strong> at Devi Technology Ltd while actively pursuing a full-time cloud or cybersecurity role in the UK.</p>
+      </div>
+      <div class="stats-grid reveal">
+        <div class="stat-card"><div class="stat-number">MSc</div><div class="stat-label">Cyber Security 2:1</div></div>
+        <div class="stat-card"><div class="stat-number">2</div><div class="stat-label">Security Projects</div></div>
+        <div class="stat-card"><div class="stat-number">3</div><div class="stat-label">Job Simulations</div></div>
+        <div class="stat-card"><div class="stat-number">3+</div><div class="stat-label">Certifications</div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="skills">
+    <div class="section-header reveal"><span class="section-number">// 02</span><h2>Skills & Tools</h2></div>
+    <div class="skills-grid">
+      <div class="skill-category reveal"><h3>Cloud Engineering</h3><div class="skill-tags"><span class="skill-tag">GCP Compute Engine</span><span class="skill-tag">Cloud Storage</span><span class="skill-tag">VPC Networking</span><span class="skill-tag">Kubernetes GKE</span><span class="skill-tag">Load Balancers</span><span class="skill-tag">Cloud Shell</span></div></div>
+      <div class="skill-category reveal"><h3>Cloud Security</h3><div class="skill-tags"><span class="skill-tag">IAM & RBAC</span><span class="skill-tag">Firewalls</span><span class="skill-tag">Zero Trust</span><span class="skill-tag">IDS / IPS</span><span class="skill-tag">Network Segmentation</span><span class="skill-tag">Security Command Center</span></div></div>
+      <div class="skill-category reveal"><h3>Threat Detection & SOC</h3><div class="skill-tags"><span class="skill-tag">MITRE ATT&CK</span><span class="skill-tag">SIEM Logic</span><span class="skill-tag">Log Analysis</span><span class="skill-tag">Incident Response</span><span class="skill-tag">Threat Hunting</span><span class="skill-tag">Vulnerability Assessment</span></div></div>
+      <div class="skill-category reveal"><h3>DevOps & IaC</h3><div class="skill-tags"><span class="skill-tag">Terraform</span><span class="skill-tag">Kubernetes</span><span class="skill-tag">Docker</span><span class="skill-tag">Jenkins</span><span class="skill-tag">Git</span><span class="skill-tag">CI/CD Pipelines</span></div></div>
+      <div class="skill-category reveal"><h3>Programming</h3><div class="skill-tags"><span class="skill-tag">Python</span><span class="skill-tag">Bash / Shell</span><span class="skill-tag">PowerShell</span><span class="skill-tag">Security Scripting</span></div></div>
+      <div class="skill-category reveal"><h3>Frameworks & Compliance</h3><div class="skill-tags"><span class="skill-tag">CIS Benchmarks</span><span class="skill-tag">SOC2</span><span class="skill-tag">Risk Assessment</span><span class="skill-tag">Threat Modelling</span><span class="skill-tag">Linux</span><span class="skill-tag">Windows Server</span></div></div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="projects">
+    <div class="section-header reveal"><span class="section-number">// 03</span><h2>Projects</h2></div>
+    <div class="projects-grid">
+      <div class="project-card reveal">
+        <div class="project-number">PROJECT 01</div>
+        <h3>Cloud Security Posture Checker</h3>
+        <p>A Python tool that audits cloud infrastructure configuration files and identifies security misconfigurations across storage, IAM, firewall rules, and logging — the kind that cause real-world data breaches.</p>
+        <div class="project-tech"><span class="tech-chip">Python</span><span class="tech-chip">GCP</span><span class="tech-chip">IAM</span><span class="tech-chip">CIS Benchmarks</span><span class="tech-chip">JSON</span></div>
+        <ul class="project-highlights">
+          <li>Detects public storage buckets, wildcard IAM permissions, open firewall ports</li>
+          <li>Risk scoring: CRITICAL / HIGH / MEDIUM / LOW severity levels</li>
+          <li>Automated remediation reports — mirrors GCP Security Command Center</li>
+          <li>Covers root causes of Capital One, Twitch, and Facebook cloud breaches</li>
+        </ul>
+        <a href="https://github.com/Shivasai-25/cloud-security-posture-checker" class="project-link">View on GitHub →</a>
+      </div>
+      <div class="project-card reveal">
+        <div class="project-number">PROJECT 02</div>
+        <h3>SOC Log Analyzer & Threat Detector</h3>
+        <p>A Security Operations Centre tool that parses security logs and automatically detects attack patterns using the same logic found in enterprise SIEM platforms like Splunk and Google Chronicle.</p>
+        <div class="project-tech"><span class="tech-chip">Python</span><span class="tech-chip">MITRE ATT&CK</span><span class="tech-chip">SIEM Logic</span><span class="tech-chip">Threat Hunting</span><span class="tech-chip">JSON</span></div>
+        <ul class="project-highlights">
+          <li>Detects brute force, port scans, privilege escalation, and data exfiltration</li>
+          <li>After-hours access detection for insider threat identification</li>
+          <li>Every alert tagged with MITRE ATT&CK tactic and technique ID</li>
+          <li>Sliding window detection algorithm used in real SOC environments</li>
+        </ul>
+        <a href="https://github.com/Shivasai-25/soc-log-analyzer" class="project-link">View on GitHub →</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="experience">
+    <div class="section-header reveal"><span class="section-number">// 04</span><h2>Work Experience</h2></div>
+    <div class="exp-list">
+      <div class="exp-card reveal">
+        <div class="exp-header"><div><div class="exp-title">Software Test Engineer</div><div class="exp-company">Devi Technology Ltd · Birmingham, UK</div></div><div class="exp-date">Dec 2025 – Present</div></div>
+        <ul class="exp-bullets">
+          <li>Gained hands-on exposure to Software Development Lifecycle (SDLC), system architecture, and QA processes in a technology environment.</li>
+          <li>Designed and executed manual test cases, identified and reported software defects to development teams.</li>
+          <li>Applied structured testing methodologies including regression, functional, and integration testing.</li>
+        </ul>
+      </div>
+      <div class="exp-card reveal">
+        <div class="exp-header"><div><div class="exp-title">Duty Manager</div><div class="exp-company">JenningsBet · London, UK</div></div><div class="exp-date">Feb 2022 – Dec 2025</div></div>
+        <ul class="exp-bullets">
+          <li>Managed age verification, accurate data logging, and documentation in a heavily regulated gambling environment.</li>
+          <li>Ensured full compliance with gambling regulations and company policies — experience directly applicable to GRC and compliance roles in cybersecurity.</li>
+          <li>Maintained operational logs and monitoring records supporting business objectives.</li>
+        </ul>
+      </div>
+      <div class="exp-card reveal">
+        <div class="exp-header"><div><div class="exp-title">Process Associate</div><div class="exp-company">Cognizant Technology Solutions · Hyderabad, India</div></div><div class="exp-date">May 2020 – May 2021</div></div>
+        <ul class="exp-bullets">
+          <li>Labelled and annotated datasets for autonomous vehicle AI training including objects, lanes, and traffic scenarios.</li>
+          <li>Mentored new joiners on labelling standards and validated team outputs to maintain data accuracy.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="simulations">
+    <div class="section-header reveal"><span class="section-number">// 05</span><h2>Job Simulations</h2></div>
+    <div class="sims-grid">
+      <div class="sim-card reveal">
+        <div class="sim-company">AIG · Forage · Feb 2026</div>
+        <h4>Shields Up: Cybersecurity Simulation</h4>
+        <ul>
+          <li>Researched vulnerabilities from CISA advisories relevant to AIG infrastructure.</li>
+          <li>Drafted communications advising business units on zero-day risks and remediation steps.</li>
+          <li>Built a Python brute force script as part of an ethical hacking exercise.</li>
+        </ul>
+      </div>
+      <div class="sim-card reveal">
+        <div class="sim-company">Tata Consultancy Services · Forage · Feb 2026</div>
+        <h4>Cybersecurity Analyst Simulation</h4>
+        <ul>
+          <li>Completed a simulation focused on Identity and Access Management (IAM) for a global enterprise.</li>
+          <li>Assessed platform identity security and recommended IAM strategy improvements.</li>
+          <li>Gained experience in enterprise IAM frameworks and security consulting workflows.</li>
+        </ul>
+      </div>
+      <div class="sim-card reveal">
+        <div class="sim-company">Mastercard · Forage · Feb 2026</div>
+        <h4>Cybersecurity Simulation</h4>
+        <ul>
+          <li>Acted as a Security Awareness Analyst on Mastercard's Security Awareness Team.</li>
+          <li>Analysed phishing threats and identified vulnerable departments from simulation data.</li>
+          <li>Designed targeted security awareness training programmes to reduce phishing risk.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="certs">
+    <div class="section-header reveal"><span class="section-number">// 06</span><h2>Certifications & Education</h2></div>
+    <div class="certs-grid">
+      <div class="cert-card reveal"><div class="cert-icon">☁️</div><div class="cert-info"><h4>Google Cloud Cybersecurity Certificate</h4><p>Google</p><p class="cert-year">Feb 2026</p></div></div>
+      <div class="cert-card reveal"><div class="cert-icon">🛠️</div><div class="cert-info"><h4>Google Cloud Engineer Certificate</h4><p>Google / Coursera</p><p class="cert-year">2025</p></div></div>
+      <div class="cert-card reveal"><div class="cert-icon">🌐</div><div class="cert-info"><h4>Networking Basics</h4><p>Cisco</p><p class="cert-year">2025</p></div></div>
+    </div>
+    <div class="edu-list" style="margin-top:4px;">
+      <div class="edu-card reveal"><div class="edu-left"><h4>MSc Cyber Security with Advanced Research</h4><p>University of Hertfordshire, UK</p><p class="edu-grade">Grade: 2:1</p></div><div class="edu-right">Sep 2021 – Feb 2024</div></div>
+      <div class="edu-card reveal"><div class="edu-left"><h4>BTech Electronics & Communication Engineering</h4><p>Chaitanya Institute of Technology and Science, India</p><p class="edu-grade">Grade: 75% — Distinction</p></div><div class="edu-right">2015 – 2019</div></div>
+      <div class="edu-card reveal"><div class="edu-left"><h4>Secondary School — Maths, Physics & Chemistry</h4><p>SVS Group of Institutions, India</p><p class="edu-grade">Grade: 78%</p></div><div class="edu-right">2013 – 2015</div></div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="contact">
+    <div class="section-header reveal"><span class="section-number">// 07</span><h2>Get In Touch</h2></div>
+    <p class="contact-sub reveal">Open to Cloud Engineer, Cloud Security, SOC Analyst, and Cybersecurity roles in the UK. Let's connect.</p>
+    <div class="contact-links reveal">
+      <a href="https://github.com/Shivasai-25" target="_blank" class="contact-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub
+      </a>
+      <a href="mailto:shivasai.pashikanti@gmail.com" class="contact-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Email
+      </a>
+      <a href="https://www.linkedin.com/in/shiva-sai-pashikanti-480956126/" target="_blank" class="contact-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+        LinkedIn
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 <span>Shiva Sai Pashikanti</span></p>
+    <p>Open to <span>cloud & cybersecurity roles</span> in the UK</p>
+  </footer>
+
+  <script>
+    document.body.classList.add('js-loaded');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) setTimeout(() => entry.target.classList.add('visible'), i * 60);
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
