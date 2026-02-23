@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shiva Sai Pashikanti — Cybersecurity Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #050a0f;
+      --surface: #0a1520;
+      --surface2: #0f1e2e;
+      --accent: #00e5ff;
+      --accent2: #00ff88;
+      --accent3: #ff6b35;
+      --text: #e8f4f8;
+      --muted: #5a7a8a;
+      --border: rgba(0,229,255,0.15);
+      --glow: 0 0 20px rgba(0,229,255,0.3);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      overflow-x: hidden;
+      cursor: default;
+    }
+
+    /* Custom cursor */
+    .cursor { display: none; 
+      position: fixed;
+      width: 8px; height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s;
+      box-shadow: 0 0 10px var(--accent);
+    }
+    .cursor-ring { display: none; 
+      position: fixed;
+      width: 32px; height: 32px;
+      border: 1px solid rgba(0,229,255,0.5);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: all 0.15s ease;
+    }
+
+    /* Grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Scanline effect */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.08) 2px,
+        rgba(0,0,0,0.08) 4px
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 20px 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      background: rgba(5,10,15,0.85);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-logo {
+      font-family: 'Share Tech Mono', monospace;
+      color: var(--accent);
+      font-size: 14px;
+      letter-spacing: 2px;
+    }
+
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* SECTIONS */
+    section {
+      position: relative;
+      z-index: 2;
+      padding: 120px 60px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* HERO */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 140px;
+      max-width: 100%;
+      padding-left: 80px;
+      padding-right: 80px;
+    }
+
+    .hero-tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      color: var(--accent2);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.2s forwards;
+    }
+
+    .hero-tag::before {
+      content: '> ';
+      color: var(--accent);
+    }
+
+    h1 {
+      font-size: clamp(48px, 7vw, 96px);
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -2px;
+      margin-bottom: 8px;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.4s forwards;
+    }
+
+    .name-line {
+      display: block;
+      background: linear-gradient(135deg, var(--text) 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(16px, 2vw, 22px);
+      color: var(--muted);
+      margin: 32px 0 48px;
+      max-width: 600px;
+      line-height: 1.7;
+      font-weight: 400;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.6s forwards;
+    }
+
+    .hero-badges {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.8s forwards;
+    }
+
+    .badge {
+      padding: 6px 16px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--accent);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 20px;
+      opacity: 0;
+      animation: fadeUp 0.6s 1.0s forwards;
+    }
+
+    .btn-primary {
+      padding: 14px 32px;
+      background: var(--accent);
+      color: var(--bg);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-decoration: none;
+      text-transform: uppercase;
+      font-weight: 700;
+      transition: all 0.2s;
+      display: inline-block;
+    }
+    .btn-primary:hover {
+      background: var(--accent2);
+      box-shadow: 0 0 30px rgba(0,255,136,0.4);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      padding: 14px 32px;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: all 0.2s;
+      display: inline-block;
+    }
+    .btn-outline:hover {
+      background: rgba(0,229,255,0.08);
+      box-shadow: var(--glow);
+      transform: translateY(-2px);
+    }
+
+    /* Animated terminal line */
+    .terminal-line {
+      position: absolute;
+      bottom: 60px;
+      left: 80px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 13px;
+      color: var(--muted);
+      opacity: 0;
+      animation: fadeIn 1s 1.5s forwards;
+    }
+
+    .terminal-line span {
+      color: var(--accent2);
+      animation: blink 1s infinite;
+    }
+
+    /* SECTION HEADERS */
+    .section-header {
+      margin-bottom: 64px;
+    }
+
+    .section-number {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      color: var(--accent);
+      letter-spacing: 4px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    h2 {
+      font-size: clamp(32px, 4vw, 52px);
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1.1;
+    }
+
+    /* ABOUT */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+
+    .about-text p {
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 16px;
+      margin-bottom: 20px;
+      font-weight: 400;
+    }
+
+    .about-text p strong {
+      color: var(--text);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 28px;
+      transition: border-color 0.2s;
+    }
+
+    .stat-card:hover { border-color: var(--accent); }
+
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* SKILLS */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2px;
+    }
+
+    .skill-category {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 32px;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .skill-category::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .skill-category:hover::before { opacity: 1; }
+    .skill-category:hover { border-color: rgba(0,229,255,0.3); }
+
+    .skill-category h3 {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      color: var(--accent);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .skill-tag {
+      padding: 5px 12px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    /* PROJECTS */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+      gap: 2px;
+    }
+
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+
+    .project-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(0,229,255,0.03) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .project-card:hover::after { opacity: 1; }
+    .project-card:hover { border-color: rgba(0,229,255,0.4); transform: translateY(-4px); }
+
+    .project-number {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 3px;
+      margin-bottom: 16px;
+    }
+
+    .project-card h3 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+
+    .project-card p {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.7;
+      margin-bottom: 24px;
+      font-weight: 400;
+    }
+
+    .project-tech {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 28px;
+    }
+
+    .tech-chip {
+      padding: 4px 10px;
+      background: rgba(0,229,255,0.08);
+      border: 1px solid rgba(0,229,255,0.2);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 1px;
+    }
+
+    .project-highlights {
+      list-style: none;
+      margin-bottom: 28px;
+    }
+
+    .project-highlights li {
+      font-size: 14px;
+      color: var(--muted);
+      padding: 6px 0;
+      padding-left: 20px;
+      position: relative;
+      font-weight: 400;
+    }
+
+    .project-highlights li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--accent2);
+    }
+
+    .project-link {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-bottom: 1px solid rgba(0,229,255,0.3);
+      padding-bottom: 2px;
+      transition: all 0.2s;
+    }
+
+    .project-link:hover {
+      color: var(--accent2);
+      border-color: var(--accent2);
+    }
+
+    /* CERTS */
+    .certs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2px;
+    }
+
+    .cert-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 32px;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      transition: all 0.3s;
+    }
+
+    .cert-card:hover { border-color: rgba(0,229,255,0.4); }
+
+    .cert-icon {
+      width: 44px;
+      height: 44px;
+      background: rgba(0,229,255,0.1);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .cert-info h4 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .cert-info p {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      color: var(--accent);
+      letter-spacing: 1px;
+    }
+
+    .cert-info .cert-desc {
+      font-family: 'Syne', sans-serif;
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 8px;
+      letter-spacing: 0;
+    }
+
+    /* CONTACT */
+    #contact {
+      text-align: center;
+    }
+
+    #contact h2 { margin-bottom: 16px; }
+
+    .contact-sub {
+      color: var(--muted);
+      font-size: 16px;
+      margin-bottom: 48px;
+      font-weight: 400;
+    }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .contact-link {
+      padding: 14px 28px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      text-decoration: none;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .contact-link:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: var(--glow);
+    }
+
+    /* FOOTER */
+    footer {
+      position: relative;
+      z-index: 2;
+      border-top: 1px solid var(--border);
+      padding: 32px 80px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer p {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 2px;
+    }
+
+    footer span { color: var(--accent); }
+
+    /* DIVIDER */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0.2;
+      margin: 0 60px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .reveal {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .js-loaded .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    .js-loaded .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav { padding: 16px 24px; }
+      .nav-links {  }
+      #hero { padding: 120px 24px 80px; }
+      section { padding: 80px 24px; }
+      .about-grid { grid-template-columns: 1fr; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .terminal-line { left: 24px; }
+      footer { padding: 24px; flex-direction: column; gap: 12px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">SSP // SECURITY</div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#certs">Certs</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-tag">Cybersecurity & Cloud Professional</div>
+    <h1>
+      <span class="name-line">Shiva Sai</span>
+      <span class="name-line">Pashikanti</span>
+    </h1>
+    <p class="hero-subtitle">
+      MSc Cybersecurity graduate specializing in cloud security, cloud engineering, and threat detection. Building tools that secure and defend real cloud infrastructure.
+    </p>
+    <div class="hero-badges">
+      <span class="badge">Cloud Security</span>
+      <span class="badge">Cloud Engineering</span>
+      <span class="badge">SOC Analysis</span>
+      <span class="badge">GCP</span>
+      <span class="badge">Threat Detection</span>
+      <span class="badge">MITRE ATT&CK</span>
+    </div>
+    <div class="hero-cta">
+      <a href="#projects" class="btn-primary">View Projects</a>
+      <a href="https://github.com/Shivasai-25" target="_blank" class="btn-outline">GitHub Profile</a>
+    </div>
+    <div class="terminal-line">
+      $ status: actively seeking cloud security, cloud engineering &amp; SOC roles <span>_</span>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-header reveal">
+      <span class="section-number">// 01</span>
+      <h2>About Me</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>
+          I'm a <strong>cybersecurity and cloud professional</strong> with a Master's degree in Cybersecurity, passionate about building secure cloud infrastructure and detecting threats before they cause damage.
+        </p>
+        <p>
+          My expertise spans <strong>cloud engineering and cloud security</strong> — designing and deploying cloud systems on GCP while ensuring they are secure, compliant, and resilient against attacks.
+        </p>
+        <p>
+          I have hands-on experience with <strong>GCP</strong>, IAM policy auditing, log analysis, and threat detection using industry frameworks like MITRE ATT&CK. I build real tools, not just theory.
+        </p>
+      </div>
+      <div class="stats-grid reveal">
+        <div class="stat-card">
+          <div class="stat-number">MSc</div>
+          <div class="stat-label">Cybersecurity</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">2+</div>
+          <div class="stat-label">Security Projects</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">GCP</div>
+          <div class="stat-label">Certified</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">5+</div>
+          <div class="stat-label">MITRE Tactics Covered</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="section-header reveal">
+      <span class="section-number">// 02</span>
+      <h2>Skills & Tools</h2>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-category reveal">
+        <h3>Cloud Engineering</h3>
+        <div class="skill-tags">
+          <span class="skill-tag">Google Cloud Platform</span>
+          <span class="skill-tag">Cloud Infrastructure</span>
+          <span class="skill-tag">Compute Engine</span>
+          <span class="skill-tag">Cloud Storage</span>
+          <span class="skill-tag">Cloud Networking</span>
+          <span class="skill-tag">IAM & Access Control</span>
+        </div>
+      </div>
+      <div class="skill-category reveal">
+        <h3>Cloud Security</h3>
+        <div class="skill-tags">
+          <span class="skill-tag">Google Cloud Platform</span>
+          <span class="skill-tag">IAM Policy Auditing</span>
+          <span class="skill-tag">Cloud Storage Security</span>
+          <span class="skill-tag">Firewall Rules</span>
+          <span class="skill-tag">Audit Logging</span>
+          <span class="skill-tag">Security Command Center</span>
+        </div>
+      </div>
+      <div class="skill-category reveal">
+        <h3>Threat Detection</h3>
+        <div class="skill-tags">
+          <span class="skill-tag">MITRE ATT&CK</span>
+          <span class="skill-tag">SIEM Logic</span>
+          <span class="skill-tag">Log Analysis</span>
+          <span class="skill-tag">Brute Force Detection</span>
+          <span class="skill-tag">Port Scan Detection</span>
+          <span class="skill-tag">Incident Triage</span>
+        </div>
+      </div>
+      <div class="skill-category reveal">
+        <h3>Programming</h3>
+        <div class="skill-tags">
+          <span class="skill-tag">Python</span>
+          <span class="skill-tag">Bash / Shell</span>
+          <span class="skill-tag">JSON / REST APIs</span>
+          <span class="skill-tag">Security Scripting</span>
+        </div>
+      </div>
+      <div class="skill-category reveal">
+        <h3>Security Concepts</h3>
+        <div class="skill-tags">
+          <span class="skill-tag">Zero Trust</span>
+          <span class="skill-tag">Least Privilege</span>
+          <span class="skill-tag">Defence in Depth</span>
+          <span class="skill-tag">CIS Benchmarks</span>
+          <span class="skill-tag">Vulnerability Management</span>
+          <span class="skill-tag">Threat Intelligence</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="section-header reveal">
+      <span class="section-number">// 03</span>
+      <h2>Projects</h2>
+    </div>
+    <div class="projects-grid">
+
+      <div class="project-card reveal">
+        <div class="project-number">PROJECT 01</div>
+        <h3>Cloud Security Posture Checker</h3>
+        <p>
+          A Python tool that scans cloud infrastructure configuration files and identifies security misconfigurations across storage, IAM, firewall rules, and logging — the kind that cause real-world data breaches.
+        </p>
+        <div class="project-tech">
+          <span class="tech-chip">Python</span>
+          <span class="tech-chip">GCP</span>
+          <span class="tech-chip">IAM</span>
+          <span class="tech-chip">CIS Benchmarks</span>
+        </div>
+        <ul class="project-highlights">
+          <li>Detects public storage buckets, wildcard IAM permissions, open firewall ports</li>
+          <li>Risk scoring system with CRITICAL / HIGH / MEDIUM / LOW severity levels</li>
+          <li>Generates actionable remediation reports</li>
+          <li>Covers root causes of Capital One, Twitch, and Facebook cloud breaches</li>
+        </ul>
+        <a href="https://github.com/Shivasai-25/cloud-security-posture-checker" class="project-link">View on GitHub →</a>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-number">PROJECT 02</div>
+        <h3>SOC Log Analyzer & Threat Detector</h3>
+        <p>
+          A Security Operations Center tool that parses security logs and automatically detects attack patterns using the same logic found in enterprise SIEM platforms like Splunk and Google Chronicle.
+        </p>
+        <div class="project-tech">
+          <span class="tech-chip">Python</span>
+          <span class="tech-chip">MITRE ATT&CK</span>
+          <span class="tech-chip">SIEM Logic</span>
+          <span class="tech-chip">Threat Hunting</span>
+        </div>
+        <ul class="project-highlights">
+          <li>Detects brute force, port scans, privilege escalation, data exfiltration</li>
+          <li>After-hours access detection for insider threat identification</li>
+          <li>Every alert tagged with MITRE ATT&CK tactic and technique ID</li>
+          <li>Sliding window detection algorithm used in real SOC environments</li>
+        </ul>
+        <a href="https://github.com/Shivasai-25/soc-log-analyzer" class="project-link">View on GitHub →</a>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- CERTIFICATIONS -->
+  <section id="certs">
+    <div class="section-header reveal">
+      <span class="section-number">// 04</span>
+      <h2>Education & Certifications</h2>
+    </div>
+    <div class="certs-grid">
+      <div class="cert-card reveal">
+        <div class="cert-icon">🎓</div>
+        <div class="cert-info">
+          <h4>MSc Cybersecurity</h4>
+          <p>Master's Degree</p>
+          <p class="cert-desc">Advanced study in network security, cryptography, cloud security, and security operations.</p>
+        </div>
+      </div>
+      <div class="cert-card reveal">
+        <div class="cert-icon">☁️</div>
+        <div class="cert-info">
+          <h4>Google Cloud Cybersecurity Certificate</h4>
+          <p>Google / Coursera</p>
+          <p class="cert-desc">Hands-on training in GCP security tools, identity management, and threat detection.</p>
+        </div>
+      </div>
+      <div class="cert-card reveal">
+        <div class="cert-icon">🛠️</div>
+        <div class="cert-info">
+          <h4>Cloud Engineer Course</h4>
+          <p>Cloud Infrastructure</p>
+          <p class="cert-desc">Practical training in cloud architecture, deployment, and infrastructure management.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-header reveal">
+      <span class="section-number">// 05</span>
+      <h2>Get In Touch</h2>
+    </div>
+    <p class="contact-sub reveal">Open to cloud security, cloud engineering, SOC analyst, and cybersecurity roles. Let's connect.</p>
+    <div class="contact-links reveal">
+      <a href="https://github.com/Shivasai-25" target="_blank" class="contact-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub
+      </a>
+      <a href="/cdn-cgi/l/email-protection#e3908b8a958290828acd9382908b8a88828d978aa3848e828a8fcd808c8e" class="contact-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Email
+      </a>
+      <a href="https://www.linkedin.com/in/shiva-sai-pashikanti-480956126/" target="_blank" class="contact-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+        LinkedIn
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 <span>Shiva Sai Pashikanti</span></p>
+    <p>Built with <span>purpose</span> // Seeking cloud security, cloud engineering &amp; SOC roles</p>
+  </footer>
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    // Add js-loaded so reveal animation only runs when JS is ready
+    document.body.classList.add('js-loaded');
+
+    // Custom cursor
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cursor.style.left = mx + 'px';
+      cursor.style.top = my + 'px';
+    });
+
+    function animateRing() {
+      rx += (mx - rx) * 0.12;
+      ry += (my - ry) * 0.12;
+      ring.style.left = rx + 'px';
+      ring.style.top = ry + 'px';
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
+
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        ring.style.width = '50px';
+        ring.style.height = '50px';
+        ring.style.borderColor = 'rgba(0,229,255,0.8)';
+      });
+      el.addEventListener('mouseleave', () => {
+        ring.style.width = '32px';
+        ring.sty
